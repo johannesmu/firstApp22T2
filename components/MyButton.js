@@ -5,7 +5,7 @@ export function MyButton ( props ) {
   const[ click, setClick ] = useState(0)
 
   return(
-    <TouchableOpacity style={ styles.button }>
+    <TouchableOpacity style={ styles.button } onPress={ () => { setClick( click + 1 ) } }>
       <Text style={styles.buttonText} >Received {click} clicks</Text>
     </TouchableOpacity>
   )

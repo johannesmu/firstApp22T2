@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { MyComponent } from './components/MyComponent'
+import { MyButton } from './components/MyButton';
 
 export default function App() {
   return (
@@ -9,6 +10,8 @@ export default function App() {
       <StatusBar style="auto" />
       <MyComponent text="Make me a sandwich!" color="red" size={32} />
       <MyComponent text="I like donuts!" color="green" size={18} />
+      <MyButton />
+      <MyButton />
     </View>
   );
 }
