@@ -6,15 +6,15 @@ import { ListItem } from './components/ListItem';
 
 
 export default function App() {
-  const LIST = [
-    { id: '1' , name: 'Banana', status: false },
-    { id: '2' , name: 'Pineapple', status: false },
-    { id: '3' , name: 'Eggplant', status: false },
-    { id: '4' , name: 'Durian', status: false },
-  ]
+  // const LIST = [
+  //   { id: '1' , name: 'Banana', status: false },
+  //   { id: '2' , name: 'Pineapple', status: false },
+  //   { id: '3' , name: 'Eggplant', status: false },
+  //   { id: '4' , name: 'Durian', status: false },
+  // ]
 
-  // application state
-  const [ListData, SetListData] = useState(LIST)
+  // application states
+  const [ListData, SetListData] = useState([])
   const [input,setInput] = useState('')
 
   // function to add value of input to ListData (add an item to list)
@@ -40,7 +40,9 @@ export default function App() {
           onPress={ () => addItem() }
           disabled={(input.length < 3) ? true : false }
         >
-          <Text style={ styles.buttonText}>Add</Text>
+          <Text style={ (input.length < 3) ? styles.buttonTextDisabled : styles.buttonText}>
+            Add
+          </Text>
         </TouchableOpacity>
       </View>
       
@@ -89,10 +91,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
+    color: 'black',
   },
   buttonDisabled: {
     backgroundColor: "#CCC",
     padding: 5,
     borderWidth: 1,
-  }
+  },
+  buttonTextDisabled: {
+    fontSize: 20,
+    color: 'white',
+  },
 });
