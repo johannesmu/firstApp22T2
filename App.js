@@ -15,11 +15,15 @@ export default function App() {
 
   // application state
   const [ListData, SetListData] = useState(LIST)
-  const [input,setInput] = useState()
+  const [input,setInput] = useState('')
 
   // function to add value of input to ListData (add an item to list)
   const addItem = () => {
-    console.log('pressed')
+    // use timestamp to create unique id
+    let newId = new Date().getTime()
+    let newItem = { id: newId, name: input, status: false }
+    let newList = ListData.concat( newItem )
+    SetListData( newList )
   }
 
   //function to render list item
@@ -31,11 +35,15 @@ export default function App() {
     <View style={styles.container}>
       <View style={ styles.header }>
         <TextInput style={styles.input} onChangeText={ (value) => setInput(value) } />
-        <TouchableOpacity style={styles.button} onPress={ () => addItem() }>
+        <TouchableOpacity 
+          style={ (input.length < 3) ? styles.buttonDisabled : styles.button} 
+          onPress={ () => addItem() }
+          disabled={(input.length < 3) ? true : false }
+        >
           <Text style={ styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </View>
-      <Text>{input}</Text>
+      
       <FlatList 
         data={ListData} 
         keyExtractor={ (item) => item.id }
@@ -82,4 +90,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
   },
+  buttonDisabled: {
+    backgroundColor: "#CCC",
+    padding: 5,
+    borderWidth: 1,
+  }
 });
