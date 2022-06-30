@@ -15,6 +15,12 @@ export default function App() {
 
   // application state
   const [ListData, SetListData] = useState(LIST)
+  const [input,setInput] = useState()
+
+  // function to add value of input to ListData (add an item to list)
+  const addItem = () => {
+    console.log('pressed')
+  }
 
   //function to render list item
   const renderItem = ({item}) => (
@@ -24,12 +30,12 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={ styles.header }>
-        <TextInput style={styles.input} />
-        <TouchableOpacity style={styles.button}>
+        <TextInput style={styles.input} onChangeText={ (value) => setInput(value) } />
+        <TouchableOpacity style={styles.button} onPress={ () => addItem() }>
           <Text style={ styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </View>
-      
+      <Text>{input}</Text>
       <FlatList 
         data={ListData} 
         keyExtractor={ (item) => item.id }
