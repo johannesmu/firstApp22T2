@@ -17,7 +17,7 @@ export default function App() {
 
   //function to render list item
   const renderItem = ({item}) => (
-    <View style={styles.listItem} >
+    <View style={[ styles.listItem, styles.listBackground ]} >
       <Text style={styles.listText} >{item.name}</Text>
     </View>
   )
@@ -46,5 +46,8 @@ const styles = StyleSheet.create({
   },
   listText: {
     fontSize: 20,
-  }
+  },
+  listBackground: {
+    backgroundColor: 'white',
+  },
 });
