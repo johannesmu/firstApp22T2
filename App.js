@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants'
 import {useState} from 'react'
+import { ListItem } from './components/ListItem';
 
 
 export default function App() {
@@ -17,13 +18,18 @@ export default function App() {
 
   //function to render list item
   const renderItem = ({item}) => (
-    <View style={[ styles.listItem, styles.listBackground ]} >
-      <Text style={styles.listText} >{item.name}</Text>
-    </View>
+   <ListItem item={item} />
   )
 
   return (
     <View style={styles.container}>
+      <View style={ styles.header }>
+        <TextInput style={styles.input} />
+        <TouchableOpacity style={styles.button}>
+          <Text style={ styles.buttonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
+      
       <FlatList 
         data={ListData} 
         keyExtractor={ (item) => item.id }
@@ -49,5 +55,25 @@ const styles = StyleSheet.create({
   },
   listBackground: {
     backgroundColor: 'white',
+  },
+  input: {
+    padding: 5,
+    fontSize: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: "white",
+    padding: 5,
+    borderWidth: 1,
+  },
+  buttonText: {
+    fontSize: 20,
   },
 });
