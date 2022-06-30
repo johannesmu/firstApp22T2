@@ -1,26 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { MyComponent } from './components/MyComponent'
-import { MyButton } from './components/MyButton';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import Constants from 'expo-constants'
+import {useState} from 'react'
+
 
 export default function App() {
+  const LIST = [
+    { id: '1' , name: 'Banana', status: false },
+    { id: '2' , name: 'Pineapple', status: false },
+    { id: '3' , name: 'Eggplant', status: false },
+    { id: '4' , name: 'Durian', status: false },
+  ]
+
+  // application state
+  const [ListData, SetListData] = useState(LIST)
+
+  //function to render list item
+  const renderItem = ({item}) => (
+    <View style={styles.listItem} >
+      <Text style={styles.listText} >{item.name}</Text>
+    </View>
+  )
+
   return (
     <View style={styles.container}>
-      <Text>Hello there! It's our first app!</Text>
-      <StatusBar style="auto" />
-      <MyComponent text="Make me a sandwich!" color="red" size={32} />
-      <MyComponent text="I like donuts!" color="green" size={18} />
-      <MyButton />
-      <MyButton />
+      <FlatList 
+        data={ListData} 
+        keyExtractor={ (item) => item.id }
+        renderItem={renderItem}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: '#f7efb2',
+    // alignItems: 'center',
     justifyContent: 'center',
   },
+  listItem: {
+    padding: 10,
+  },
+  listText: {
+    fontSize: 20,
+  }
 });
