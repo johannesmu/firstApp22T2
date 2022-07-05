@@ -7,12 +7,7 @@ import { ListSeparator } from './components/ListSeparator';
 
 
 export default function App() {
-  // const LIST = [
-  //   { id: '1' , name: 'Banana', status: false },
-  //   { id: '2' , name: 'Pineapple', status: false },
-  //   { id: '3' , name: 'Eggplant', status: false },
-  //   { id: '4' , name: 'Durian', status: false },
-  // ]
+  
 
   // application states
   const [ListData, SetListData] = useState([])
