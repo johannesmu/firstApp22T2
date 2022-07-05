@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity } from 'r
 import Constants from 'expo-constants'
 import {useState} from 'react'
 import { ListItem } from './components/ListItem';
+import { ListSeparator } from './components/ListSeparator';
 
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
         data={ListData} 
         keyExtractor={ (item) => item.id }
         renderItem={renderItem}
+        ItemSeparatorComponent={ ListSeparator }
       />
     </View>
   );
