@@ -1,17 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants'
-import {useState} from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ListItem } from './components/ListItem';
 import { ListSeparator } from './components/ListSeparator';
+import { ListEmpty } from './components/ListEmpty';
 
 
 export default function App() {
+  
+  // useEffect Hook
   
 
   // application states
   const [ListData, SetListData] = useState([])
   const [input,setInput] = useState('')
+
+  //reference to Textinput
+  const txtInput = useRef()
+
+  useEffect( () => console.log("updating"), [ListData] )
 
   // function to add value of input to ListData (add an item to list)
   const addItem = () => {
@@ -20,17 +28,36 @@ export default function App() {
     let newItem = { id: newId, name: input, status: false }
     let newList = ListData.concat( newItem )
     SetListData( newList )
+    //txtInput.clear()
+  }
+
+  const deleteItem = ( itemId ) => {
+    // find the item id
+    // remove item with the id from array (ListData)
+    const newList = ListData.filter( (item) => {
+      if( item.id !== itemId ) {
+        return item
+      }
+    })
+    // setListData( new array )
+    SetListData( newList )
   }
 
   //function to render list item
   const renderItem = ({item}) => (
-   <ListItem item={item} />
+   <ListItem item={item} remove={ deleteItem } />
   )
+
+  
 
   return (
     <View style={styles.container}>
       <View style={ styles.header }>
-        <TextInput style={styles.input} onChangeText={ (value) => setInput(value) } />
+        <TextInput 
+          style={styles.input} 
+          onChangeText={ (value) => setInput(value) } 
+          ref={txtInput} 
+        />
         <TouchableOpacity 
           style={ (input.length < 3) ? styles.buttonDisabled : styles.button} 
           onPress={ () => addItem() }
@@ -47,6 +74,7 @@ export default function App() {
         keyExtractor={ (item) => item.id }
         renderItem={renderItem}
         ItemSeparatorComponent={ ListSeparator }
+        ListEmptyComponent={ ListEmpty }
       />
     </View>
   );
