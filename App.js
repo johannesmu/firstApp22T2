@@ -6,95 +6,140 @@ import { ListItem } from './components/ListItem';
 import { ListSeparator } from './components/ListSeparator';
 import { ListEmpty } from './components/ListEmpty';
 import { ListFooter } from './components/ListFooter';
+import Storage from 'react-native-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function App() {
-  
-  // useEffect Hook
-  
+
+  const storage = new Storage({
+    // maximum capacity, default 1000 key-ids
+    size: 1000,
+
+    // Use AsyncStorage for RN apps, or window.localStorage for web apps.
+    // If storageBackend is not set, data will be lost after reload.
+    storageBackend: AsyncStorage, // for web: window.localStorage
+
+    // expire time, default: 1 day (1000 * 3600 * 24 milliseconds).
+    // can be null, which means never expire.
+    defaultExpires: null,
+
+    // cache data in the memory. default is true.
+    enableCache: true
+  });
+
 
   // application states
   const [ListData, SetListData] = useState([])
-  const [input,setInput] = useState('')
+  const [input, setInput] = useState('')
+  const [ starting, setStarting ] = useState( true )
+
 
   //reference to Textinput
   const txtInput = useRef()
 
-  const sortList = (arr) => {
-    arr.sort( ( item1, item2 ) => {
-      return item2.id - item1.id
-    } )
+  // storage functions
+  const saveData = () => {
+    storage.save({
+      key: 'localListData',
+      data: JSON.stringify(ListData)
+    });
   }
 
-  useEffect( () => sortList(ListData) , [ListData] )
+  const loadData = () => {
+    storage.load({
+      key: 'localListData'
+    })
+    .then( (data) => {
+      SetListData( JSON.parse(data) )
+    })
+  }
+
+  const sortList = (arr) => {
+    arr.sort((item1, item2) => {
+      return item2.id - item1.id
+    })
+  }
+
+  useEffect(() => {
+    sortList(ListData)
+    saveData()
+  }, [ListData])
+
+  useEffect( () => {
+    if( starting ) {
+      loadData()
+      setStarting( false )
+    }
+  })
 
   // function to add value of input to ListData (add an item to list)
   const addItem = () => {
     // use timestamp to create unique id
     let newId = new Date().getTime()
     let newItem = { id: newId, name: input, status: false }
-    let newList = ListData.concat( newItem )
-    SetListData( newList )
+    let newList = ListData.concat(newItem)
+    SetListData(newList)
     txtInput.current.clear()
   }
 
-  const updateStatus = ( itemId ) => {
-    let newList = ListData.map( (item) => {
-      if( item.id === itemId ) {
+  const updateStatus = (itemId) => {
+    let newList = ListData.map((item) => {
+      if (item.id === itemId) {
         return { id: item.id, name: item.name, status: true }
       }
       else {
         return item
       }
     })
-    SetListData( newList )
+    SetListData(newList)
   }
 
-  const deleteItem = ( itemId ) => {
+  const deleteItem = (itemId) => {
     // find the item id
     // remove item with the id from array (ListData)
-    const newList = ListData.filter( (item) => {
-      if( item.id !== itemId ) {
+    const newList = ListData.filter((item) => {
+      if (item.id !== itemId) {
         return item
       }
     })
     // setListData( new array )
-    SetListData( newList )
+    SetListData(newList)
   }
 
   //function to render list item
-  const renderItem = ({item}) => (
-   <ListItem item={item} remove={ deleteItem } update={ updateStatus } />
+  const renderItem = ({ item }) => (
+    <ListItem item={item} remove={deleteItem} update={updateStatus} />
   )
 
-  
+
 
   return (
     <View style={styles.container}>
-      <View style={ styles.header }>
-        <TextInput 
-          style={styles.input} 
-          onChangeText={ (value) => setInput(value) } 
-          ref={txtInput} 
+      <View style={styles.header}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(value) => setInput(value)}
+          ref={txtInput}
         />
-        <TouchableOpacity 
-          style={ (input.length < 3) ? styles.buttonDisabled : styles.button} 
-          onPress={ () => addItem() }
-          disabled={(input.length < 3) ? true : false }
+        <TouchableOpacity
+          style={(input.length < 3) ? styles.buttonDisabled : styles.button}
+          onPress={() => addItem()}
+          disabled={(input.length < 3) ? true : false}
         >
-          <Text style={ (input.length < 3) ? styles.buttonTextDisabled : styles.buttonText}>
+          <Text style={(input.length < 3) ? styles.buttonTextDisabled : styles.buttonText}>
             Add
           </Text>
         </TouchableOpacity>
       </View>
-      
-      <FlatList 
-        data={ListData} 
-        keyExtractor={ (item) => item.id }
+
+      <FlatList
+        data={ListData}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        ItemSeparatorComponent={ ListSeparator }
-        ListEmptyComponent={ ListEmpty }
-        ListFooterComponent={ <ListFooter text="End of List" />}
+        ItemSeparatorComponent={ListSeparator}
+        ListEmptyComponent={ListEmpty}
+        ListFooterComponent={<ListFooter text="End of List" />}
       />
     </View>
   );
