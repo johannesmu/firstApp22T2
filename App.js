@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import { ListItem } from './components/ListItem';
 import { ListSeparator } from './components/ListSeparator';
 import { ListEmpty } from './components/ListEmpty';
+import { ListFooter } from './components/ListFooter';
 
 
 export default function App() {
@@ -28,7 +29,7 @@ export default function App() {
     let newItem = { id: newId, name: input, status: false }
     let newList = ListData.concat( newItem )
     SetListData( newList )
-    //txtInput.clear()
+    txtInput.current.clear()
   }
 
   const deleteItem = ( itemId ) => {
@@ -75,6 +76,7 @@ export default function App() {
         renderItem={renderItem}
         ItemSeparatorComponent={ ListSeparator }
         ListEmptyComponent={ ListEmpty }
+        ListFooterComponent={ <ListFooter text="End of List" />}
       />
     </View>
   );
