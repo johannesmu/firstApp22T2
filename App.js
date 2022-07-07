@@ -20,7 +20,13 @@ export default function App() {
   //reference to Textinput
   const txtInput = useRef()
 
-  useEffect( () => console.log("updating"), [ListData] )
+  const sortList = (arr) => {
+    arr.sort( ( item1, item2 ) => {
+      return item2.id - item1.id
+    } )
+  }
+
+  useEffect( () => sortList(ListData) , [ListData] )
 
   // function to add value of input to ListData (add an item to list)
   const addItem = () => {
@@ -30,6 +36,18 @@ export default function App() {
     let newList = ListData.concat( newItem )
     SetListData( newList )
     txtInput.current.clear()
+  }
+
+  const updateStatus = ( itemId ) => {
+    let newList = ListData.map( (item) => {
+      if( item.id === itemId ) {
+        return { id: item.id, name: item.name, status: true }
+      }
+      else {
+        return item
+      }
+    })
+    SetListData( newList )
   }
 
   const deleteItem = ( itemId ) => {
@@ -46,7 +64,7 @@ export default function App() {
 
   //function to render list item
   const renderItem = ({item}) => (
-   <ListItem item={item} remove={ deleteItem } />
+   <ListItem item={item} remove={ deleteItem } update={ updateStatus } />
   )
 
   

@@ -6,7 +6,12 @@ export function ListItem( props ) {
       <TouchableOpacity onPress={ () => props.remove(props.item.id) }>
         <Text>Delete</Text>
       </TouchableOpacity>
-      <Text style={ styles.itemText}>{ props.item.name }</Text>
+      <Text 
+        style={ (props.item.status) ? styles.itemTextDone : styles.itemText} 
+        onPress={ () => props.update(props.item.id) } 
+      >
+        { props.item.name }
+      </Text>
     </View>
   )
 }
@@ -18,5 +23,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 20,
+  },
+  itemTextDone: {
+    fontSize: 20,
+    color: '#cccccc',
   },
 })
